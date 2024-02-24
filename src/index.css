@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,700,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer {
+  body {
+    @apply bg-[#fafafa] dark:bg-[#141414] overflow-x-hidden;
+  }
+}
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    @apply w-1 h-1;
+  }
+  .scrollbar::-webkit-scrollbar-track {
+    @apply text-gray-400;
+  }
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-blue-400/50 rounded-lg;
+  }
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-blue-400/80;
+  }
+}
