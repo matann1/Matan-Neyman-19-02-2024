@@ -1,33 +1,32 @@
 import { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, SearchBar } from "../components";
 import WeatherIcons from "../assets/constants.js";
 import { HelperFunctions } from "../utils/helpers.js";
 import FetchLocations from "../hooks/fetchLocation.js";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiFunctions from "../utils/apiFunctions.js";
-import { useLocation } from "react-router-dom";
+
+const defaultCity = {
+  key: "215854",
+  name: "Tel Aviv",
+  rank: 15,
+};
 
 const Home = () => {
+  const locations = FetchLocations();
+  const queryClient = useQueryClient();
+  const [forecasts, setForecasts] = useState({});
+  const [isFavorite, setIsFavorite] = useState(false);
   const [favorites, setFavorites] = useState(
     (Object.keys(localStorage).includes("favorites") &&
       JSON.parse(localStorage.getItem("favorites"))) ||
       {}
   );
-  let location = useLocation();
-  const queryClient = useQueryClient();
-  const [forecasts, setForecasts] = useState({});
-  const [isFavorite, setIsFavorite] = useState(false);
-  const locations = FetchLocations();
 
   const [search, setSearch] = useState(
-    location?.state
-      ? { ...location.state }
-      : (localStorage.getItem("search") &&
-          JSON.parse(localStorage.getItem("search"))) || {
-          key: "215854",
-          name: "Tel Aviv",
-          rank: 15,
-        }
+    (localStorage.getItem("search") &&
+      JSON.parse(localStorage.getItem("search"))) ||
+      defaultCity
   );
   const [current, setCurrent] = useState(
     (Object.keys(localStorage).includes(search?.key) &&
@@ -48,10 +47,12 @@ const Home = () => {
       setCurrent(data);
     },
     onError: (error) => {
+      setSearch(defaultCity);
       console.error("error==>", error);
     },
     retry: 0,
   });
+
   const { mutate: forecast } = useMutation({
     mutationFn: apiFunctions.getForecast,
     mutationKey: [`forecast${search?.key}`],
@@ -70,9 +71,11 @@ const Home = () => {
       ? localStorage.setItem("favorites", JSON.stringify(favorites))
       : localStorage.removeItem("favorites");
   }, [favorites]);
+
   useEffect(() => {
     const allKeys = Object.keys(localStorage);
-    const currentKey = `${search?.key}`;
+    const currentKey = search?.key;
+
     if (search && !allKeys.includes(currentKey)) {
       mutate(search.key);
     } else if (allKeys.includes(currentKey)) {
