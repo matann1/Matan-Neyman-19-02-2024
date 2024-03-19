@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, SearchBar } from "../components";
 import WeatherIcons from "../assets/constants.js";
 import { HelperFunctions } from "../utils/helpers.js";
-import FetchLocations from "../hooks/fetchLocation.js";
+import useFetchLocations from "../hooks/useFetchLocation.js";
 import apiFunctions from "../utils/apiFunctions.js";
 
 const defaultCity = {
@@ -13,7 +13,7 @@ const defaultCity = {
 };
 
 const Home = () => {
-  const locations = FetchLocations();
+  const locations = useFetchLocations();
   const queryClient = useQueryClient();
   const [forecasts, setForecasts] = useState({});
   const [isFavorite, setIsFavorite] = useState(false);

@@ -18,8 +18,9 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [themeMode, setThemeMode] = useState("light");
-
+  const [themeMode, setThemeMode] = useState(
+    localStorage.getItem("themeMode") ?? "light"
+  );
   const lightTheme = () => {
     setThemeMode("light");
   };

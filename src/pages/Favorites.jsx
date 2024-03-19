@@ -1,12 +1,12 @@
 import { Card } from "../components";
 import { HelperFunctions } from "../utils/helpers";
 import WeatherIcons from "../assets/constants.js";
-import FetchLocations from "../hooks/fetchLocation.js";
+import useFetchLocations from "../hooks/useFetchLocation.js";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Favorites = () => {
-  const locations = FetchLocations();
+  const locations = useFetchLocations();
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
   const [favorites, setFavorites] = useState(
